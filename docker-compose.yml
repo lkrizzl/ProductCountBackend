@@ -1,0 +1,23 @@
+version: '3.4'
+
+services:
+  webapi:
+    image: ${DOCKER_REGISTRY-}webapi
+    build:
+      context: .
+      dockerfile: WebApi/Dockerfile
+    ports:
+      - "5000:5000"
+      - "5001:5001"
+    
+  products.database:
+    image: postgres:latest
+    container_name: product.database
+    volumes:
+      - ./.containers/database:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=products
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    ports:
+      - 5432:5432
