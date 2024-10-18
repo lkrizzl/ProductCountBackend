@@ -1,15 +1,13 @@
 name: ASP.NET CI
 
 on:
+  workflow_dispatch:
   push:
     branches:
-      - master
-  pull_request:
-    branches:
-      - master
+      - main
 
 jobs:
-  test:
+  publish:
     runs-on: ubuntu-latest
 
     services:
@@ -22,13 +20,14 @@ jobs:
         ports:
           - 5432:5432
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Setup .NET
-      uses: actions/setup-dotnet@v2
+      uses: actions/setup-dotnet@v3
       with:
         dotnet-version: '8.x' 
+    - name: Restore
+      run: dotnet restore ./ProductCountBackend.sln
 
     - name: Build
       run: dotnet build ./ProductCountBackend.sln --configuration Release --no-restore
